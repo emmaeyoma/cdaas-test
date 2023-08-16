@@ -1,0 +1,23 @@
+version: v1
+kind: kubernetes
+application: my-test-application
+
+targets:
+  aws-spin-support:
+    account: aws-spin-support
+    namespace: emmanuel-spin
+    strategy: myCanary
+
+manifests:
+  - path: nginx.yaml
+
+strategies:
+  myCanary:
+    canary:
+      steps:
+        - setWeight:
+            weight: 50
+        - pause:
+            untilApproved: true
+        - setWeight:
+            weight: 100
